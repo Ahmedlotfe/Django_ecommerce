@@ -41,9 +41,10 @@
         <br>
         <div class="box-element hidden" id="payment-info">
             <small>Paypal Options</small>
-            <button id="make-payment">
+            <div id="paypal-button-container"></div>
+            <!-- <button id="make-payment">
                 Make payment
-            </button>
+            </button> -->
         </div>
 		
 	</div>
@@ -68,9 +69,51 @@
 	</div>
 </div>
 
+<script src="https://www.paypal.com/sdk/js?client-id=ASiBaTaFG_Bqzrosh29f9ico3QFL2zvxm1L6rze34cUHKJcb6Q0dEXYAaI04ZpGZ4b45iJ2gybRLl5mM&currency=USD"></script>
+
+<script>
+    let total = '{{ order.get_cart_total }}'
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+        style:{
+            color: 'blue',
+            shape: 'rect'
+        },
+
+        // Set up the transaction
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: parseFloat(total).toFixed(2)
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                // Successful capture! For demo purposes:
+                // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                // var transaction = orderData.purchase_units[0].payments.captures[0];
+                // alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+                sumbitFormData()
+                // Replace the above to show a success message within this page, e.g.
+                // const element = document.getElementById('paypal-button-container');
+                // element.innerHTML = '';
+                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                // Or go to another URL:  actions.redirect('thank_you.html');
+            });
+        }
+
+
+    }).render('#paypal-button-container');
+</script>
+
 <script type="text/javascript">
     let shipping = '{{ order.shipping }}'
-    let total = '{{ order.get_cart_total }}'
 
     if(shipping == 'False'){
         document.getElementById('shipping-info').innerHTML = ''
@@ -97,9 +140,11 @@
         document.getElementById('payment-info').classList.remove('hidden')
     })
 
+    /*
     document.getElementById('make-payment').addEventListener('click', function(e){
         sumbitFormData()
     })
+    */
 
     function sumbitFormData(){
         console.log('Payment button clicked')
