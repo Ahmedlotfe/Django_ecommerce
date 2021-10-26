@@ -10,6 +10,10 @@ from .utils import cookieCart, cartData, guestOrder
 # Create your views here
 
 
+def home(request):
+    return render(request, 'store/home.html')
+
+
 @login_required
 def store(request):
 
