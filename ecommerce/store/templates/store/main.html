@@ -73,14 +73,15 @@
             </ul>
             <div class="form-inline my-2 my-lg-">
                 {% if user.is_authenticated %}
-                    <a href="#"class="btn btn-danger">Logout</a>
+                    <a href="{% url 'logout' %}"class="btn btn-danger">Logout</a>
+                    <a href="{% url 'cart' %}">
+                        <img id="cart-icon" src="{% static 'images/cart.png' %}">
+                    </a>
+                    <p id="cart-total">{{ cartItems }}</p>
                 {% else %}
-                    <a href="#"class="btn btn-warning">Login</a>
+                    <a href="{% url 'login' %}" class="btn btn-warning">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-warning">register</a>
                 {% endif %}
-                <a href="{% url 'cart' %}">
-                    <img id="cart-icon" src="{% static 'images/cart.png' %}">
-                </a>
-                <p id="cart-total">{{ cartItems }}</p>
             </div>
         </div>
     </nav>

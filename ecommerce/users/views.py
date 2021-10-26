@@ -10,7 +10,7 @@ def register(request):
             form.save()
             messages.success(
                 request, "Your account has been created!, Now you can login")
-            return redirect('store')
+            return redirect('login')
     else:
         form = UserRegisterForm()
     context = {
